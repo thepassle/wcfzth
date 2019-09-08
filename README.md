@@ -1,5 +1,10 @@
 # Web Components from Zero to Hero Workshop
 
+## Slides
+
+- [Preworkshop slides](https://docs.google.com/presentation/d/1Jo9mqdCBkaHSN6AYj_iroGHJ7Ag3-tXrJJncpFXDRFM/edit?usp=sharing)
+- [Lunchspiration](https://docs.google.com/presentation/d/1Pi5nvFcmQlfksIp3m4XhMqvmi0RHqvppoi-se_9F7fg/edit?usp=sharing)
+
 ## Requirements
 
 - 🚨 The latest version of Chrome (We'll be making use of some cutting edge browser standards)
