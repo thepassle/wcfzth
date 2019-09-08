@@ -1,0 +1,22 @@
+<html>
+    <body>
+        <pokedex-app></pokedex-app>
+    </body>
+    <script type="module">
+        /* 
+            Let's start using lit-html to do our rendering for us!
+
+            In the <pokemon-card> component:
+                - in the <pokemon-card> components' `connectedCallback()`, remove:
+                ```
+                    this.$img.src = pokemonDetails.sprites['front_default'];
+                    this.$name.innerHTML = this._name;
+                ``` 
+                - use lit-html to render the image and h2 header to `this.shadowRoot`
+                - get rid of any querySelectors in your component
+
+                For reference you can always take a look at the solution, or at these relevant links:
+                - https://lit-html.polymer-project.org/guide/writing-templates#render-dynamic-text-content
+        */
+    </script>
+</html>

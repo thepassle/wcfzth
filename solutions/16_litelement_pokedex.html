@@ -1,0 +1,140 @@
+<html>
+    <body>
+        <pokedex-app></pokedex-app>
+    </body>
+    <script type="module">
+        /* 
+            And finally, let's try to render our data
+
+                - implement the following render method:
+                ```
+                    render() {
+                        return html`
+                            <h1>Pokedex App!</h1>
+                            <ul id="pokeList">
+                                ${this.listOfPokemon.map(pokemon => html`
+                                    <pokemon-card
+                                        name=${pokemon.name}
+                                        .url=${pokemon.url}
+                                    ></pokemon-card>
+                                `)}
+                            </ul>
+                        `
+                    }
+                ```
+
+                We already implemented the `<pokemon-card>` component for you
+
+                For reference you can always take a look at the solution, or at these relevant links:
+                - https://lit-element.polymer-project.org/
+        */
+        
+        import { LitElement, html, css } from 'https://unpkg.com/lit-element@2.2.1/lit-element.js?module';
+
+        class PokedexApp extends LitElement {
+            static get styles() {
+                return css`
+                    :host {
+                        display: block;
+                        font-family: sans-serif;
+                        text-align: center;
+                    }
+
+                    ul {
+                        list-style: none;
+                        padding: 0;
+                    }
+                `;
+            }
+
+            static get properties() {
+                return {
+                    listOfPokemon: { type: Array }
+                }
+            }
+
+            constructor() {
+                super();
+                this.listOfPokemon = [];
+            }
+
+            async connectedCallback() {
+                super.connectedCallback();
+                const response = await fetch('https://pokeapi.co/api/v2/pokemon');
+                const { results } = await response.json();
+                this.listOfPokemon = results;
+            }
+
+            render() {
+                return html`
+                    <h1>Pokedex App!</h1>
+                    <ul id="pokeList">
+                        ${this.listOfPokemon.map(pokemon => html`
+                            <pokemon-card
+                                .name=${pokemon.name}
+                                .url=${pokemon.url}
+                            ></pokemon-card>
+                        `)}
+                    </ul>
+                `
+            }
+        }
+
+        window.customElements.define('pokedex-app', PokedexApp);
+
+
+
+
+
+        class PokemonCard extends LitElement {
+            static get styles() {
+                return css`            
+                    :host {
+                        display: block;
+                        font-family: sans-serif;
+                        text-align: center;
+                        border: solid 1px black;
+                        border-radius: 3px;
+                        width: 400px;
+                        height: auto;
+                        margin-left: auto;
+                        margin-right: auto;
+                    }
+
+                    img {
+                        width: 40px;
+                        height: 40px;
+                    }
+                `
+            }
+
+            static get properties() {
+                return {
+                    url: { type: String },
+                    name: { type: String, reflect: true },
+                    sprite: { type: String }
+                }
+            }
+
+            async connectedCallback() {
+                super.connectedCallback();
+                const response = await fetch(this.url);
+                const pokemonDetails = await response.json();
+
+                this.name = pokemonDetails.name;
+                this.sprite = pokemonDetails.sprites['front_default'];
+            }
+
+            render() {
+                return html`
+                    <li>
+                        <img src="${this.sprite}"></img>
+                        <h2>${this.name}</h2>
+                    </li>
+                `
+            }
+        }
+
+        window.customElements.define('pokemon-card', PokemonCard);
+    </script>
+</html>

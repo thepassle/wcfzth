@@ -1,0 +1,58 @@
+<html>
+    <body>
+        <pokedex-app></pokedex-app>
+    </body>
+    <script type="module">
+        /* 
+            Lets fetch our data in the `connectedCallback()`
+
+                !! DONT FORGET TO CALL `super.connectedCallback()` first !!
+
+                - use fetch in the connectedCallback to the pokemonApi
+                - set `this.listOfPokemon = results;`
+
+                For reference you can always take a look at the solution, or at these relevant links:
+                - https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
+                - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function
+        */
+        
+        import { LitElement, html, css } from 'https://unpkg.com/lit-element@2.2.1/lit-element.js?module';
+
+        class PokedexApp extends LitElement {
+            static get styles() {
+                return css`
+                    :host {
+                        display: block;
+                        font-family: sans-serif;
+                        text-align: center;
+                    }
+
+                    ul {
+                        list-style: none;
+                        padding: 0;
+                    }
+                `;
+            }
+
+            static get properties() {
+                return {
+                    listOfPokemon: { type: Array }
+                }
+            }
+
+            constructor() {
+                super();
+                this.listOfPokemon = [];
+            }
+
+            async connectedCallback() {
+                super.connectedCallback();
+                const response = await fetch('https://pokeapi.co/api/v2/pokemon');
+                const { results } = await response.json();
+                this.listOfPokemon = results;
+            }
+        }
+
+        window.customElements.define('pokedex-app', PokedexApp);
+    </script>
+</html>

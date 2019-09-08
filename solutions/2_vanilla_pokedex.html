@@ -1,0 +1,67 @@
+<html>
+    <body>
+        <pokedex-app></pokedex-app>
+    </body>
+    <script type="module">
+        /* 
+            Add a constructible stylesheet to your web component's shadowRoot
+            
+                - make a new CSSStyleSheet object
+                - add some css to it using `.replaceSync()`
+                - add the CSSStyleSheet object to your component's adoptedStyleSheets
+
+                You can use these styles:
+                ```
+                    :host {
+                        display: block;
+                        font-family: sans-serif;
+                        text-align: center;
+                    }
+
+                    ul {
+                        list-style: none;
+                        padding: 0;
+                    }
+                ```
+
+                For reference you can always take a look at the solution, or at these relevant links:
+                - https://developers.google.com/web/updates/2019/02/constructable-stylesheets
+
+            !! 🚨 TIP: You need to use the latest version of Chrome 🚨 !!
+
+        */
+
+        const stylesheet = new CSSStyleSheet();
+        stylesheet.replaceSync(`
+            :host {
+                display: block;
+                font-family: sans-serif;
+                text-align: center;
+            }
+
+            ul {
+                list-style: none;
+                padding: 0;
+            }
+        `);
+
+        const template = document.createElement('template');
+        template.innerHTML = `
+            <h1>Pokedex App!</h1>
+
+            <ul id="pokeList"></ul>
+        `;
+
+        class PokedexApp extends HTMLElement {
+            constructor() {
+                super();
+                const shadowRoot = this.attachShadow({ 'mode': 'open' });
+                shadowRoot.appendChild(template.content.cloneNode(true));
+                shadowRoot.adoptedStyleSheets = [stylesheet];
+                this.$pokeList = shadowRoot.querySelector('ul');
+            }
+        }
+
+        window.customElements.define('pokedex-app', PokedexApp);
+    </script>
+</html>

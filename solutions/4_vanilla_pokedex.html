@@ -1,0 +1,72 @@
+<html>
+    <body>
+        <pokedex-app></pokedex-app>
+    </body>
+    <script type="module">
+        /* 
+            Let's render the pokemon!
+
+                - Add a `_renderPokemon(listOfPokemon.results)` method to your component, the component should:
+                    - take an array of pokemon
+                    - loop through the array of pokemon using `.forEach(pokemon => { ... })`
+                    - forEach pokemon you should: 
+                        - create a new element `pokemon-card` (We haven't made this yet, but don't worry about it yet!)
+                        - set the `name` attribute to `pokemon.name` like so: `$pokemonCard.setAttribute('name', pokemon.name);`
+                        - set the `.url` property to `pokemon.url`
+                        - append the `pokemon-card` element to `this.$pokeList`
+
+                For reference you can always take a look at the solution, or at these relevant links:
+                - https://developer.mozilla.org/nl/docs/Web/JavaScript/Reference/Global_Objects/Array/forEach
+
+        */
+
+        const stylesheet = new CSSStyleSheet();
+        stylesheet.replaceSync(`
+            :host {
+                display: block;
+                font-family: sans-serif;
+                text-align: center;
+            }
+
+            ul {
+                list-style: none;
+                padding: 0;
+            }
+        `);
+
+        const template = document.createElement('template');
+        template.innerHTML = `
+            <h1>Pokedex App!</h1>
+
+            <ul id="pokeList"></ul>
+        `;
+
+        class PokedexApp extends HTMLElement {
+            constructor() {
+                super();
+                const shadowRoot = this.attachShadow({ 'mode': 'open' });
+                shadowRoot.appendChild(template.content.cloneNode(true));
+                shadowRoot.adoptedStyleSheets = [stylesheet];
+                this.$pokeList = shadowRoot.querySelector('ul');
+            }
+
+            async connectedCallback() {
+                const response = await fetch('https://pokeapi.co/api/v2/pokemon');
+                const listOfPokemon = await response.json();
+                this._renderPokemon(listOfPokemon.results);
+            }
+
+            _renderPokemon(listOfPokemon) {
+                listOfPokemon.forEach(pokemon => {
+                    let $pokemonCard = document.createElement('pokemon-card');
+                    $pokemonCard.setAttribute('name', pokemon.name);
+                    $pokemonCard.url = pokemon.url
+                    this.$pokeList.appendChild($pokemonCard);
+                });
+            }
+
+        }
+
+        window.customElements.define('pokedex-app', PokedexApp);
+    </script>
+</html>

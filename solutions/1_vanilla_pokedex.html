@@ -1,0 +1,43 @@
+<html>
+    <body>
+        <pokedex-app></pokedex-app>
+    </body>
+    <script type="module">
+        /* 
+            Create your web component
+            Your web component should:
+                
+                - Use a template element that has a:
+                    - h1 title as 'Pokedex App!'
+                    - ul with an ID of 'pokeList'
+                - have an 'mode': 'open' shadowRoot
+                - a querySelector for the ul
+
+                For reference you can always take a look at the solution, or at these relevant links:
+                - https://developer.mozilla.org/en-US/docs/Web/API/Element/attachShadow
+                - https://developer.mozilla.org/en-US/docs/Web/HTML/Element/template
+                - https://developer.mozilla.org/en-US/docs/Web/API/CustomElementRegistry/define
+
+            !! 🚨 TIP: Do not forget to define your custom element 🚨 !!
+
+        */
+
+        const template = document.createElement('template');
+        template.innerHTML = `
+            <h1>Pokedex App!</h1>
+
+            <ul id="pokeList"></ul>
+        `;
+
+        class PokedexApp extends HTMLElement {
+            constructor() {
+                super();
+                const shadowRoot = this.attachShadow({ 'mode': 'open' });
+                shadowRoot.appendChild(template.content.cloneNode(true));
+                this.$pokeList = shadowRoot.querySelector('ul');
+            }
+        }
+
+        window.customElements.define('pokedex-app', PokedexApp);
+    </script>
+</html>

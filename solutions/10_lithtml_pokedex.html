@@ -1,0 +1,127 @@
+<html>
+    <body>
+        <pokedex-app></pokedex-app>
+    </body>
+    <script type="module">
+        /* 
+            Let's start using lit-html to do our rendering for us!
+
+            In the `PokemonApp` component:
+                - Empty the contents of the `_renderPokemon(listOfPokeemon)` method
+                - use lit-html's `render()` function to render our h1 header, and our list of pokemon, to `this.shadowRoot`
+                - use the javascript `.map` array method to render thee list of pokemon
+                - set the `.url` property on the `<pokemon-card>` (see the reference links down below)
+                - set the `name` attribute on the `<pokemon-card>`
+                - get rid of any querySelectors in your component
+
+                For reference you can always take a look at the solution, or at these relevant links:
+                - https://developer.mozilla.org/nl/docs/Web/JavaScript/Reference/Global_Objects/Array/map
+                - https://lit-html.polymer-project.org/guide/writing-templates#bind-to-properties
+        */
+
+        import { html, render } from 'https://unpkg.com/lit-html@1.1.2/lit-html.js?module';
+
+        const stylesheet = new CSSStyleSheet();
+        stylesheet.replaceSync(`
+            :host {
+                display: block;
+                font-family: sans-serif;
+                text-align: center;
+            }
+
+            ul {
+                list-style: none;
+                padding: 0;
+            }
+        `);
+
+        class PokedexApp extends HTMLElement {
+            constructor() {
+                super();
+                const shadowRoot = this.attachShadow({ 'mode': 'open' });
+                shadowRoot.adoptedStyleSheets = [stylesheet];
+            }
+
+            async connectedCallback() {
+                const response = await fetch('https://pokeapi.co/api/v2/pokemon');
+                const listOfPokemon = await response.json();
+                this._renderPokemon(listOfPokemon.results);
+            }
+
+            _renderPokemon(listOfPokemon) {
+                render(html`
+                    <h1>Pokedex App!</h1>
+                    <ul id="pokeList">
+                        ${listOfPokemon.map(pokemon => html`
+                            <pokemon-card
+                                name=${pokemon.name}
+                                .url=${pokemon.url}
+                            ></pokemon-card>
+                        `)}
+                    </ul>
+                `, this.shadowRoot);
+            }
+
+        }
+
+        window.customElements.define('pokedex-app', PokedexApp);
+
+
+        const pokemonStylesheet = new CSSStyleSheet();
+        pokemonStylesheet.replaceSync(`
+            :host {
+                display: block;
+                font-family: sans-serif;
+                text-align: center;
+                border: solid 1px black;
+                border-radius: 3px;
+                width: 400px;
+                height: auto;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            img {
+                width: 40px;
+                height: 40px;
+            }
+        `);
+
+        class PokemonCard extends HTMLElement {
+            set url(val) {
+                this._url = val;
+            }
+
+            get url() {
+                return this._url;
+            }
+
+            static get observedAttributes() {
+                return ['name'];
+            }
+
+            attributeChangedCallback(name, oldValue, newValue) {
+                this._name = newValue;
+            }
+            
+            constructor() {
+                super();
+                const shadowRoot = this.attachShadow({ 'mode': 'open' });
+                shadowRoot.adoptedStyleSheets = [pokemonStylesheet];
+
+                this.$name = shadowRoot.querySelector('h2');
+                this.$img = shadowRoot.querySelector('img');
+            }
+
+            async connectedCallback() {
+                const response = await fetch(this._url);
+                const pokemonDetails = await response.json();
+                console.log(pokemonDetails);
+                this.$img.src = pokemonDetails.sprites['front_default'];
+                this.$name.innerHTML = this._name;
+            }
+        }
+
+        window.customElements.define('pokemon-card', PokemonCard);
+    </script>
+</html>

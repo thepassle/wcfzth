@@ -1,0 +1,27 @@
+<html>
+    <body>
+        <pokedex-app></pokedex-app>
+    </body>
+    <script type="module">
+        /* 
+            Lets make our <pokemon-card> component handle attributes
+
+                - Add a `static get observedAttributes` like so:
+                ```
+                    static get observedAttributes() {
+                        return ['name'];
+                    }
+                ```
+                - Add a `attributeChangedCallback(name, oldVal, newVal)` like so:
+                ```
+                    attributeChangedCallback(name, oldValue, newValue) {
+                        this._name = newValue;
+                    }
+                ```
+
+                For reference you can always take a look at the solution, or at these relevant links:
+                - https://codepen.io/ratchasak/pen/ggxmgX
+
+        */
+    </script>
+</html>

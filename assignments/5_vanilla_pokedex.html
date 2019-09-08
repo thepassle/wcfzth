@@ -1,0 +1,58 @@
+<html>
+    <body>
+        <pokedex-app></pokedex-app>
+    </body>
+    <script type="module">
+        /* 
+            We've created a new `<pokemon-card>` component for you, but it's missing some getters and setters!
+
+                - Implement getters and setters for a `.url` property
+
+                For reference you can always take a look at the solution, or at these relevant links:
+                - https://coryrylan.com/blog/javascript-es6-class-syntax
+
+        */
+
+        const pokemonStylesheet = new CSSStyleSheet();
+        pokemonStylesheet.replaceSync(`
+            :host {
+                display: block;
+                font-family: sans-serif;
+                text-align: center;
+                border: solid 1px black;
+                border-radius: 3px;
+                width: 400px;
+                height: auto;
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            img {
+                width: 40px;
+                height: 40px;
+            }
+        `);
+
+        const pokemonTemplate = document.createElement('template');
+        pokemonTemplate.innerHTML = `
+            <li>
+                <img src=""></img>
+                <h2></h2>
+            </li>
+        `;
+
+        class PokemonCard extends HTMLElement {
+            constructor() {
+                super();
+                const shadowRoot = this.attachShadow({ 'mode': 'open' });
+                shadowRoot.appendChild(pokemonTemplate.content.cloneNode(true));
+                shadowRoot.adoptedStyleSheets = [pokemonStylesheet];
+
+                this.$name = shadowRoot.querySelector('h2');
+                this.$img = shadowRoot.querySelector('img');
+            }
+        }
+
+        window.customElements.define('pokemon-card', PokemonCard);
+    </script>
+</html>

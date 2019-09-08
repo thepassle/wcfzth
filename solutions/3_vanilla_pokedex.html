@@ -1,0 +1,60 @@
+<html>
+    <body>
+        <pokedex-app></pokedex-app>
+    </body>
+    <script type="module">
+        /* 
+            Let's fetch some data!
+
+                - Add a `connectedCallback()` to your web component
+                - Use the fetch API to call the following endpoint:
+                    `https://pokeapi.co/api/v2/pokemon`
+                - log your results to the console
+
+                For reference you can always take a look at the solution, or at these relevant links:
+                - https://developer.mozilla.org/en-US/docs/Web/API/Fetch_API/Using_Fetch
+                - https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/async_function
+
+        */
+
+        const stylesheet = new CSSStyleSheet();
+        stylesheet.replaceSync(`
+            :host {
+                display: block;
+                font-family: sans-serif;
+                text-align: center;
+            }
+
+            ul {
+                list-style: none;
+                padding: 0;
+            }
+        `);
+
+        const template = document.createElement('template');
+        template.innerHTML = `
+            <h1>Pokedex App!</h1>
+
+            <ul id="pokeList"></ul>
+        `;
+
+        class PokedexApp extends HTMLElement {
+            constructor() {
+                super();
+                const shadowRoot = this.attachShadow({ 'mode': 'open' });
+                shadowRoot.appendChild(template.content.cloneNode(true));
+                shadowRoot.adoptedStyleSheets = [stylesheet];
+                this.$pokeList = shadowRoot.querySelector('ul');
+            }
+
+            async connectedCallback() {
+                const response = await fetch('https://pokeapi.co/api/v2/pokemon');
+                const listOfPokemon = await response.json();
+                console.log(listOfPokemon.results);
+            }
+
+        }
+
+        window.customElements.define('pokedex-app', PokedexApp);
+    </script>
+</html>
