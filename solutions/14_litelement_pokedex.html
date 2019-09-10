@@ -1,12 +1,11 @@
 <html>
-    <body>
-        <pokedex-app></pokedex-app>
-    </body>
-    <script type="module">
-        /* 
+  <body>
+    <pokedex-app></pokedex-app>
+  </body>
+  <script type="module">
+    /* 
             Lets add some properties to our LitElement
 
-                - Create a new PokedexApp class that extends from LitElement
                 - Add a `static get properties() {}` and add properties for: `listOfPokemon`, like so:
                 ```
                     static get properties() {
@@ -20,37 +19,41 @@
                 For reference you can always take a look at the solution, or at these relevant links:
                 - https://lit-element.polymer-project.org/guide/properties
         */
-        
-        import { LitElement, html, css } from 'https://unpkg.com/lit-element@2.2.1/lit-element.js?module';
 
-        class PokedexApp extends LitElement {
-            static get styles() {
-                return css`
-                    :host {
-                        display: block;
-                        font-family: sans-serif;
-                        text-align: center;
-                    }
+    import {
+      LitElement,
+      html,
+      css
+    } from "https://unpkg.com/lit-element@2.2.1/lit-element.js?module";
 
-                    ul {
-                        list-style: none;
-                        padding: 0;
-                    }
-                `;
-            }
+    class PokedexApp extends LitElement {
+      static get styles() {
+        return css`
+          :host {
+            display: block;
+            font-family: sans-serif;
+            text-align: center;
+          }
 
-            static get properties() {
-                return {
-                    listOfPokemon: { type: Array }
-                }
-            }
+          ul {
+            list-style: none;
+            padding: 0;
+          }
+        `;
+      }
 
-            constructor() {
-                super();
-                this.listOfPokemon = [];
-            }
-        }
+      static get properties() {
+        return {
+          listOfPokemon: { type: Array }
+        };
+      }
 
-        window.customElements.define('pokedex-app', PokedexApp);
-    </script>
+      constructor() {
+        super();
+        this.listOfPokemon = [];
+      }
+    }
+
+    window.customElements.define("pokedex-app", PokedexApp);
+  </script>
 </html>
